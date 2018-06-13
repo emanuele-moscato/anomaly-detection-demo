@@ -2,6 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import itertools
+from plotly.offline import init_notebook_mode, iplot
+import plotly.graph_objs as go
+
+init_notebook_mode(connected=True)
 
 DATA_DIR = '../data/'
 
@@ -82,3 +86,72 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+
+def plot2d(x, labels):
+    """
+    Plots 2-dimensional data x coloring it with the labels y.
+    """
+    trace0 = go.Scatter(
+        x = x[labels[:,0]==0][:,0],
+        y = x[labels[:,0]==0][:,1],
+        mode = 'markers',
+        name = 'class 0',
+        hoverinfo = 'all'
+    )
+    
+    trace1 = go.Scatter(
+        x = x[labels[:,0]==1][:,0],
+        y = x[labels[:,0]==1][:,1],
+        mode = 'markers',
+        name = 'class 1',
+        hoverinfo = 'all'
+    )
+    
+    layout=go.Layout(
+        hovermode = 'closest'
+    )
+    
+    data = [trace0, trace1]
+    
+    fig = go.Figure(data=data, layout=layout)
+    
+    iplot(fig)
+
+def plot3d(x, labels):
+    """
+    Plots 3-dimensional data x coloring it with the labels y.
+    """
+    trace0 = go.Scatter3d(
+        x = x[labels[:,0]==0][:,0],
+        y = x[labels[:,0]==0][:,1],
+        z = x[labels[:,0]==0][:,2],
+        mode = 'markers',
+        marker = dict(
+            size=5
+        )
+    )
+    
+    trace1 = go.Scatter3d(
+        x = x[labels[:,0]==1][:,0],
+        y = x[labels[:,0]==1][:,1],
+        z = x[labels[:,0]==1][:,2],
+        mode = 'markers',
+        marker = dict(
+            size=5
+        )
+    )
+    
+    layout = go.Layout(
+        margin=dict(
+            l=0,
+            r=0,
+            b=0,
+            t=0
+        )
+    )
+    
+    data = [trace0, trace1]
+    
+    fig = go.Figure(data=data, layout=layout)
+    
+    iplot(fig)
